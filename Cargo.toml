@@ -1,7 +1,12 @@
 [package]
-authors = ["Nathaniel Ringo <remexre@gmail.com>"]
+authors = ["Nathan Ringo <remexre@gmail.com>"]
+description = "Simple globally interned strings."
+documentation = "https://docs.rs/symbol"
+homepage = "https://github.com/remexre/symbol-rs"
 license = "Apache-2.0/MIT"
 name = "symbol"
+readme = "README.md"
+repository = "https://github.com/remexre/symbol-rs"
 version = "0.1.0"
 
 [dependencies]
