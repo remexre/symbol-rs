@@ -1,0 +1,11 @@
+[package]
+authors = ["Nathaniel Ringo <remexre@gmail.com>"]
+license = "Apache-2.0/MIT"
+name = "symbol"
+version = "0.1.0"
+
+[dependencies]
+lazy_static = "1.0.0"
+spin = "0.4.6"
+
+gc = { optional = true, version = "0.3.2" }
