@@ -59,7 +59,7 @@ impl Symbol {
 
 impl Debug for Symbol {
     fn fmt(&self, fmt: &mut Formatter) -> FmtResult {
-        fmt.debug_tuple("Symbol").field(&self.s).finish()
+        Debug::fmt(self.s, fmt)
     }
 }
 
