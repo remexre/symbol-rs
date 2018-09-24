@@ -110,6 +110,18 @@ impl PartialEq for Symbol {
     }
 }
 
+impl PartialEq<str> for Symbol {
+    fn eq(&self, other: &str) -> bool {
+        self.partial_cmp(other) == Some(Ordering::Equal)
+    }
+}
+
+impl PartialOrd<str> for Symbol {
+    fn partial_cmp(&self, other: &str) -> Option<Ordering> {
+        self.s.partial_cmp(other)
+    }
+}
+
 #[cfg(feature = "gc")]
 impl ::gc::Finalize for Symbol {
     fn finalize(&self) {}
