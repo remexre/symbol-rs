@@ -7,7 +7,7 @@
 //! # use symbol::Symbol;
 //! # fn main() {
 //! let s1: Symbol = "asdf".into();
-//! assert_eq!(&*s1, "asdf");
+//! assert_eq!(s1, "asdf");
 //!
 //! let s2: Symbol = "asdf".into();
 //! let s3: Symbol = "qwerty".into();
@@ -110,15 +110,15 @@ impl PartialEq for Symbol {
     }
 }
 
-impl PartialEq<str> for Symbol {
-    fn eq(&self, other: &str) -> bool {
-        self.partial_cmp(other) == Some(Ordering::Equal)
+impl<S: AsRef<str>> PartialEq<S> for Symbol {
+    fn eq(&self, other: &S) -> bool {
+        self.partial_cmp(&other.as_ref()) == Some(Ordering::Equal)
     }
 }
 
-impl PartialOrd<str> for Symbol {
-    fn partial_cmp(&self, other: &str) -> Option<Ordering> {
-        self.s.partial_cmp(other)
+impl<S: AsRef<str>> PartialOrd<S> for Symbol {
+    fn partial_cmp(&self, other: &S) -> Option<Ordering> {
+        self.s.partial_cmp(other.as_ref())
     }
 }
 
