@@ -1,3 +1,5 @@
+#![cfg_attr(not(feature = "std"), feature(alloc))]
+#![cfg_attr(not(feature = "std"), no_std)]
 //! Simple globally interned strings.
 //!
 //! # Usage
@@ -19,6 +21,8 @@
 //! # }
 //! ```
 
+#![cfg(not(feature = "std"))]
+extern crate alloc;
 #[macro_use]
 extern crate lazy_static;
 extern crate spin;
@@ -32,6 +36,28 @@ use std::collections::BTreeSet;
 use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
 use std::mem::{forget, transmute};
 use std::ops::Deref;
+
+#[cfg(not(feature = "std"))]
+use alloc::borrow::ToOwned;
+
+#[cfg(not(feature = "std"))]
+mod std {
+    pub mod collections {
+        pub use alloc::collections::BTreeSet;
+    }
+    pub mod cmp {
+        pub use core::cmp::Ordering;
+    }
+    pub mod fmt {
+        pub use core::fmt::{Debug, Display, Formatter, Result};
+    }
+    pub mod mem {
+        pub use core::mem::{forget, transmute};
+    }
+    pub mod ops {
+        pub use core::ops::Deref;
+    }
+}
 
 use spin::Mutex;
 

@@ -17,3 +17,11 @@ script:
   - cargo test --features gc
   - cargo test --release
   - cargo test --release --features gc
+  - cargo +nightly test --no-default-features
+  - cargo +nightly test --features gc --no-default-features
+  - cargo +nightly test --features std --no-default-features
+  - cargo +nightly test --features gc,std --no-default-features
+  - cargo +nightly test --no-default-features --release
+  - cargo +nightly test --features gc --no-default-features --release
+  - cargo +nightly test --features std --no-default-features --release
+  - cargo +nightly test --features gc,std --no-default-features --release
