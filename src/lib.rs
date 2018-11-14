@@ -18,6 +18,16 @@
 //! assert_eq!(s1.addr(), s2.addr());
 //!
 //! assert_ne!(s2.addr(), s3.addr());
+//!
+//! let s4 = Symbol::gensym();
+//! assert_eq!(s4, "G#0");
+//!
+//! let s5: Symbol = "G#1".into();
+//! assert_eq!(s5, "G#1");
+//!
+//! // symbol notices that G#1 is in use
+//! let s6 = Symbol::gensym();
+//! assert_eq!(s6, "G#2");
 //! # }
 //! ```
 
@@ -36,6 +46,7 @@ use std::collections::BTreeSet;
 use std::fmt::{Debug, Display, Formatter, Result as FmtResult};
 use std::mem::{forget, transmute};
 use std::ops::Deref;
+use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 
 #[cfg(not(feature = "std"))]
 use alloc::borrow::ToOwned;
@@ -81,6 +92,24 @@ impl Symbol {
     pub fn as_str(self) -> &'static str {
         self.s
     }
+
+    /// Generates a new symbol with a name of the form `G#n`, where `n` is some positive integer.
+    pub fn gensym() -> Symbol {
+        lazy_static! {
+            static ref N: AtomicUsize = AtomicUsize::new(0);
+        }
+
+        let mut heap = SYMBOL_HEAP.lock();
+        let n = loop {
+            let n = leak_string(format!("G#{}", N.fetch_add(1, AtomicOrdering::SeqCst)));
+            if heap.insert(n) {
+                break n;
+            }
+        };
+        drop(heap);
+
+        Symbol::from(n)
+    }
 }
 
 impl Debug for Symbol {
@@ -108,10 +137,7 @@ impl<S: AsRef<str>> From<S> for Symbol {
         {
             let mut heap = SYMBOL_HEAP.lock();
             if heap.get(s).is_none() {
-                let string = s.to_owned();
-                let s = unsafe { transmute(&string as &str) };
-                forget(string);
-                heap.insert(s);
+                heap.insert(leak_string(s.to_owned()));
             }
         }
         let s = {
@@ -156,4 +182,10 @@ impl ::gc::Finalize for Symbol {
 #[cfg(feature = "gc")]
 unsafe impl ::gc::Trace for Symbol {
     unsafe_empty_trace!();
+}
+
+fn leak_string(s: String) -> &'static str {
+    let out = unsafe { transmute(&s as &str) };
+    forget(s);
+    out
 }
