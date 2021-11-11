@@ -19,6 +19,8 @@ gc = { optional = true, version = "0.3.2" }
 # Requires the std feature.
 radix_trie = { optional = true, version = "0.2.0" }
 
+serde = { features = ["derive"], optional = true, version = "1.0.0" }
+
 [features]
 default = ["std"]
 std = []

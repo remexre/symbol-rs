@@ -78,6 +78,8 @@ lazy_static! {
 
 /// An interned string with O(1) equality.
 #[allow(clippy::derive_hash_xor_eq)]
+#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
+#[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Clone, Copy, Eq, Hash)]
 pub struct Symbol {
     s: &'static str,
