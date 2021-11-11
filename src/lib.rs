@@ -191,6 +191,13 @@ unsafe impl ::gc::Trace for Symbol {
     unsafe_empty_trace!();
 }
 
+#[cfg(feature = "radix_trie")]
+impl radix_trie::TrieKey for Symbol {
+    fn encode_bytes(&self) -> Vec<u8> {
+        self.as_str().encode_bytes()
+    }
+}
+
 fn leak_string(s: String) -> &'static str {
     let out = unsafe { transmute(&s as &str) };
     forget(s);

@@ -16,6 +16,9 @@ spin = { version = "0.4.6", default-features = false }
 # Requires the std feature.
 gc = { optional = true, version = "0.3.2" }
 
+# Requires the std feature.
+radix_trie = { optional = true, version = "0.2.0" }
+
 [features]
 default = ["std"]
 std = []
