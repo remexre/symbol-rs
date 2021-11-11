@@ -77,7 +77,8 @@ lazy_static! {
 }
 
 /// An interned string with O(1) equality.
-#[derive(Clone, Copy, Eq, Hash, PartialOrd)]
+#[allow(clippy::derive_hash_xor_eq)]
+#[derive(Clone, Copy, Eq, Hash)]
 pub struct Symbol {
     s: &'static str,
 }
@@ -142,7 +143,7 @@ impl<S: AsRef<str>> From<S> for Symbol {
         }
         let s = {
             let heap = SYMBOL_HEAP.lock();
-            heap.get(s).unwrap().clone()
+            *heap.get(s).unwrap()
         };
         Symbol { s }
     }
@@ -159,6 +160,12 @@ impl Ord for Symbol {
 impl PartialEq for Symbol {
     fn eq(&self, other: &Self) -> bool {
         self.cmp(other) == Ordering::Equal
+    }
+}
+
+impl PartialOrd for Symbol {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
     }
 }
 
