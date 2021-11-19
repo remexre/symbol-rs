@@ -78,7 +78,7 @@ lazy_static! {
 
 /// An interned string with O(1) equality.
 #[allow(clippy::derive_hash_xor_eq)]
-#[cfg_attr(feature = "serde", derive(serde::Deserialize, serde::Serialize))]
+#[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Clone, Copy, Eq, Hash)]
 pub struct Symbol {
@@ -197,6 +197,13 @@ unsafe impl ::gc::Trace for Symbol {
 impl radix_trie::TrieKey for Symbol {
     fn encode_bytes(&self) -> Vec<u8> {
         self.as_str().encode_bytes()
+    }
+}
+
+#[cfg(feature = "serde")]
+impl<'de> serde::Deserialize<'de> for Symbol {
+    fn deserialize<D: serde::Deserializer<'de>>(de: D) -> Result<Symbol, D::Error> {
+        String::deserialize(de).map(Symbol::from)
     }
 }
 
