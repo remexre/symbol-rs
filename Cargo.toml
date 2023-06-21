@@ -10,16 +10,16 @@ repository = "https://github.com/remexre/symbol-rs"
 version = "0.1.9"
 
 [dependencies]
-lazy_static = "1.0.0"
+lazy_static = "1"
 spin = { version = "0.4.6", default-features = false }
 
 # Requires the std feature.
 gc = { optional = true, version = "0.3.2" }
 
 # Requires the std feature.
-radix_trie = { optional = true, version = "0.2.0" }
+radix_trie = { optional = true, version = "0.2" }
 
-serde = { features = ["derive"], optional = true, version = "1.0.0" }
+serde = { features = ["derive"], optional = true, version = "1" }
 
 [features]
 default = ["std"]
