@@ -1,4 +1,3 @@
-#![cfg_attr(not(feature = "std"), feature(alloc))]
 #![cfg_attr(not(feature = "std"), no_std)]
 //! Simple globally interned strings.
 //!
@@ -49,7 +48,7 @@ use std::ops::Deref;
 use std::sync::atomic::{AtomicUsize, Ordering as AtomicOrdering};
 
 #[cfg(not(feature = "std"))]
-use alloc::borrow::ToOwned;
+use alloc::{borrow::ToOwned, format, string::String, vec::Vec};
 
 #[cfg(not(feature = "std"))]
 mod std {
@@ -68,6 +67,11 @@ mod std {
     pub mod ops {
         pub use core::ops::Deref;
     }
+    pub mod sync {
+        pub mod atomic {
+            pub use core::sync::atomic::{AtomicUsize, Ordering};
+        }
+    }
 }
 
 use spin::Mutex;
@@ -77,7 +81,7 @@ lazy_static! {
 }
 
 /// An interned string with O(1) equality.
-#[allow(clippy::derive_hash_xor_eq)]
+#[allow(clippy::derived_hash_with_manual_eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Clone, Copy, Eq, Hash)]
