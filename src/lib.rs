@@ -114,6 +114,14 @@ impl Symbol {
         Symbol::from(n)
     }
 
+    /// A const fn that allows creating a [`Symbol`] from a `&'static str`
+    ///
+    /// ### Example:
+    /// ```
+    /// use symbol::Symbol;
+    ///
+    /// const MY_SYMBOL: Symbol = Symbol::from_static("this is a symbol");
+    /// ```
     pub const fn from_static(lit: &'static str) -> Symbol {
         Symbol { s: lit }
     }
