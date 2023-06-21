@@ -113,6 +113,10 @@ impl Symbol {
 
         Symbol::from(n)
     }
+
+    pub const fn from_static(lit: &'static str) -> Symbol {
+        Symbol { s: lit }
+    }
 }
 
 impl Debug for Symbol {
