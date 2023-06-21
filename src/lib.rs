@@ -4,7 +4,6 @@
 //! # Usage
 //!
 //! ```
-//! # extern crate symbol;
 //! # use symbol::Symbol;
 //! # fn main() {
 //! let s1: Symbol = "asdf".into();
@@ -32,9 +31,6 @@
 
 #[cfg(not(feature = "std"))]
 extern crate alloc;
-#[macro_use]
-extern crate lazy_static;
-extern crate spin;
 
 #[cfg(feature = "gc")]
 #[macro_use]
@@ -74,11 +70,10 @@ mod std {
     }
 }
 
+use once_cell::sync::Lazy;
 use spin::Mutex;
 
-lazy_static! {
-    static ref SYMBOL_HEAP: Mutex<BTreeSet<&'static str>> = Mutex::new(BTreeSet::new());
-}
+static SYMBOL_HEAP: Lazy<Mutex<BTreeSet<&'static str>>> = Lazy::new(|| Mutex::new(BTreeSet::new()));
 
 /// An interned string with O(1) equality.
 #[allow(clippy::derived_hash_with_manual_eq)]
@@ -102,9 +97,7 @@ impl Symbol {
 
     /// Generates a new symbol with a name of the form `G#n`, where `n` is some positive integer.
     pub fn gensym() -> Symbol {
-        lazy_static! {
-            static ref N: AtomicUsize = AtomicUsize::new(0);
-        }
+        static N: Lazy<AtomicUsize> = Lazy::new(|| AtomicUsize::new(0));
 
         let mut heap = SYMBOL_HEAP.lock();
         let n = loop {

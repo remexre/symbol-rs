@@ -2,6 +2,7 @@
 authors = ["Nathan Ringo <remexre@gmail.com>"]
 description = "Simple globally interned strings."
 documentation = "https://docs.rs/symbol"
+edition = "2021"
 homepage = "https://github.com/remexre/symbol-rs"
 license = "Apache-2.0/MIT"
 name = "symbol"
@@ -10,7 +11,7 @@ repository = "https://github.com/remexre/symbol-rs"
 version = "0.1.9"
 
 [dependencies]
-lazy_static = "1.0.0"
+once_cell = "1.18"
 spin = { version = "0.4.6", default-features = false }
 
 # Requires the std feature.
