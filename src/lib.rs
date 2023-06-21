@@ -81,7 +81,7 @@ lazy_static! {
 }
 
 /// An interned string with O(1) equality.
-#[allow(clippy::derive_hash_xor_eq)]
+#[allow(clippy::derived_hash_with_manual_eq)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize))]
 #[cfg_attr(feature = "serde", serde(transparent))]
 #[derive(Clone, Copy, Eq, Hash)]
