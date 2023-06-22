@@ -37,7 +37,7 @@ jobs:
           command: fmt
           args: --all -- --check
 
-      - if: ${{ matrix.rust != "1.56.0" }}
+      - if: ${{ matrix.rust != '1.56.0' }}
         uses: actions-rs/cargo@v1
         with:
           command: clippy
