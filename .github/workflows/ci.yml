@@ -13,7 +13,7 @@ jobs:
           - stable
           - beta
           - nightly
-          - 1.56.0  # MSRV
+          - 1.60.0  # MSRV
 
     steps:
       - uses: actions/checkout@v2
@@ -39,7 +39,7 @@ jobs:
           command: fmt
           args: --all -- --check
 
-      - if: ${{ matrix.rust != '1.56.0' }}
+      - if: ${{ matrix.rust != '1.60.0' }}
         uses: actions-rs/cargo@v1
         with:
           command: clippy
